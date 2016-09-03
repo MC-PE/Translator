@@ -1,0 +1,9 @@
+---
+# Welcome to Translator Config ! 
+# Choose here the default lang of your server. (Default for players, default sent in the chat and plugins).
+# All langs should be in ISO 639-1.
+DefaultLang: en
+
+# Choose here the command which will be used for players to set their language.
+SetLangCommand: setlang
+...
