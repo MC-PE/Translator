@@ -60,13 +60,13 @@ class Main extends PluginBase implements Listener{
         if($event->getPacket() instanceof TextPacket) {
             $pak = $event->getPacket();
             $lang = $this->getLang($event->getPlayer());
-            if($pak->source instanceof Player && $pak->source !== $event->getPlayer()) {
+            if($pak->source instanceof Player) {
                 $baselang = $this->getLang($p->source);
             } else {
                 $baselang = strlen($this->getConfig()->get("DefaultLang")) !== 2 ? "en" : $this->getConfig()->get("DefaultLang");
             }
             if($pak->type !==TextPacket::TYPE_TRANSLATION and $baselang !== $lang) {
-                if(!strpos("<" . is_null($pak->source) ? "" : $pak->source->getName()  . ">" , $pak->message)) { // Not Chat
+                if(!strpos($pak->message, "<" . $pak->source instanceof Player ? $pak->source->getName() : "" . ">")) { // Not Chat
                     $pak->message = $this->translate($baselang, $lang, $pak->message);
                     $pak->encode();
                 } else {
