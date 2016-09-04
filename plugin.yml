@@ -5,5 +5,8 @@ version: 1.0
 api: [2.0.0]
 main: Ad5001\Translator\Main
 commands: []
+#  translate:
+#    description: ""
+#    usage: ""
 permissions: []
 ...

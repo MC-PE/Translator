@@ -20,7 +20,7 @@ class SetLangCommand extends Command {
     public function execute(CommandSender $sender, $label, array $args) {
         if(isset($args[0])) {
             if($sender instanceof \pocketmine\Player) {
-                if($this->main->setLang($args[0])) {
+                if($this->main->setLang($sender, $args[0])) {
                     $sender->sendMessage("Your lang has been set to " . $args[0] . ".");
                 } else {
                     $sender->sendMessage("$args[0] is not a valid language ! Please use ISO 639-1 languages.");

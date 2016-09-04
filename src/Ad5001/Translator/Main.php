@@ -27,7 +27,7 @@ class Main extends PluginBase implements Listener{
 
 
     public function onPlayerJoin(\pocketmine\event\player\PlayerJoinEvent $event) {
-        $event->getPlayer()->sendMessage("Welcome to this server ! This server is using Translator_v1.0 by Ad5001 which means every message you will see on this server will be translated to your's ! Your language has been set by default to " . $this->getConfig()->get('DefaultLang'). ". You can set your language by doing /" . $this->getConfig()->get("SetLangCommand") . "<lang>. Have fun on this server !");
+        $event->getPlayer()->sendMessage("Welcome to this server ! This server is using Translator_v1.0 by Ad5001 which means every message you will see on this server will be translated to your's ! Your language has been set by default to " . $this->getConfig()->get('DefaultLang'). ". You can set your language by doing /" . $this->getConfig()->get("SetLangCommand") . " <lang>. Have fun on this server !");
     }
 
 
@@ -59,22 +59,20 @@ class Main extends PluginBase implements Listener{
     public function onDataPacketSend(\pocketmine\event\server\DataPacketSendEvent $event) {
         if($event->getPacket() instanceof TextPacket) {
             $pak = $event->getPacket();
-            $lang = $event->getPlayer();
-            if($pak->source instanceof Player) {
+            $lang = $this->getLang($event->getPlayer());
+            if($pak->source instanceof Player && $pak->source !== $event->getPlayer()) {
                 $baselang = $this->getLang($p->source);
             } else {
                 $baselang = strlen($this->getConfig()->get("DefaultLang")) !== 2 ? "en" : $this->getConfig()->get("DefaultLang");
             }
             if($pak->type !==TextPacket::TYPE_TRANSLATION and $baselang !== $lang) {
-                if($pak->type !==TextPacket::TYPE_CHAT) {
-                    echo " Not Chat";
+                if(!strpos("<" . is_null($pak->source) ? "" : $pak->source->getName()  . ">" , $pak->message)) { // Not Chat
                     $pak->message = $this->translate($baselang, $lang, $pak->message);
-                }else {
-                    echo "Chat";
+                    $pak->encode();
+                } else {
                     $pak->message = "<" . $pak->source->getName() . ">" . $this->translate($baselang, $lang, str_ireplace("<" . $pak->source->getName() . ">", "", $pak->message, 1));
+                    $pak->encode();
                 }
-            } else {
-                echo "Base=new or translate";
             }
         }
     }
@@ -84,7 +82,7 @@ class Main extends PluginBase implements Listener{
         if(strpos($text, "NoTrans") !== false) {
             return $text;
         }
-        $tr =  Utils::postURL("http://mc-pe.ga/translate/translate.php", ["from"=>$base,"to"=>$target,"text"=>$text], 40);
+        $tr =  Utils::postURL("http://mc-pe.ga/translate/translate.php", ["from"=>$base,"to"=>$target,"text"=>$text], 5000);
         if(strpos($tr, "TranslateEExeption") !== false) {
             if(!isset($this->limit)) {
                 $this->getLogger()->info("It seems like @Ad5001's char limit has been reached. Next mounth, it will be reseted next mounth. Please be patient :).");
@@ -92,15 +90,19 @@ class Main extends PluginBase implements Listener{
             }
             return $text;
         } else {
-            echo $tr;
-            return $tr;
+            if($tr !== "") {
+                return $tr;
+            } else {
+                return $text;
+            }
         }
     }
 
 
     public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
         switch($cmd->getName()){
-            case $this->getConfig()->get("SetLangCommand"):
+            case "translate":
+            $sender->sendMessage($this->translate($args[0], $args[1], $args[2]));
             break;
         }
      return false;
