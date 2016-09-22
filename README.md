@@ -1,4 +1,4 @@
-# Translator
+# Translator [![Build Status](https://travis-ci.org/MC-PE/Translator.svg?branch=master)](https://travis-ci.org/MC-PE/Translator)
 The first translator plugin for PocketMine-MP is now out! Download it now, you won't regret it!
 ---
 Requirements:    
