@@ -13,6 +13,6 @@ means that the language used in plugins and commands such as /help are in Englis
 You can also change the setlang command in case of incompatibilities with some plugins (such as EconomyS)    
 Players can set their language in game by doing /<<b></b>setlang command> <<b>[ISO 639-1] (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)</b> lang>    
 And EVERY single message in the chat (from players and plugins) will be translated in user's language !
-Also an another feature,if  you don't want your message to be translated, add NoTrans in your message or use /say. Messages won't be translated if they are already in the target language.    
+Also an another feature,if  you don't want your message to be translated, add the text: NoTrans in your message or use /say. Messages won't be translated if they are already in the target language.    
     
 What are you waiting for? Download it ;), it's worth it!
